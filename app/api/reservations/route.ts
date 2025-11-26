@@ -106,22 +106,24 @@ export async function POST(request: NextRequest) {
       properties,
     });
 
+    const safeResponse = response as any;
+
     console.log("✅ 노션 API 응답 받음:", {
-      id: response.id,
-      url: response.url,
-      created_time: response.created_time,
-      properties: Object.keys(response.properties || {}),
-      nameProperty: response.properties["이름"],
+      id: safeResponse.id,
+      url: safeResponse.url,
+      created_time: safeResponse.created_time,
+      properties: Object.keys(safeResponse.properties || {}),
+      nameProperty: safeResponse.properties["이름"],
     });
     
     // 응답에서 실제 저장된 이름 확인
-    const savedName = (response.properties as any)["이름"]?.title?.[0]?.plain_text || "없음";
+    const savedName = safeResponse.properties["이름"]?.title?.[0]?.plain_text || "없음";
     console.log("💾 저장된 예약자 이름:", savedName);
     
     return NextResponse.json({
-      id: response.id,
+      id: safeResponse.id,
       success: true,
-      notionUrl: response.url,
+      notionUrl: safeResponse.url,
       savedName: savedName,
     });
   } catch (error: any) {
