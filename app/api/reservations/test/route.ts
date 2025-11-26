@@ -67,12 +67,14 @@ export async function GET(request: NextRequest) {
         database_id: DATABASE_ID,
       });
 
+      const safeDatabase = database as any;
+
       checkResults.step3_databaseAccess = {
         success: true,
-        databaseId: database.id,
-        title: database.title?.[0]?.plain_text || "제목 없음",
-        properties: Object.keys(database.properties),
-        propertyDetails: Object.entries(database.properties).map(([key, value]: [string, any]) => ({
+        databaseId: safeDatabase.id,
+        title: safeDatabase.title?.[0]?.plain_text || "제목 없음",
+        properties: Object.keys(safeDatabase.properties || {}),
+        propertyDetails: Object.entries(safeDatabase.properties || {}).map(([key, value]: [string, any]) => ({
           name: key,
           type: value.type,
           options: value.type === 'select' ? value.select?.options?.map((opt: any) => opt.name) : undefined,
