@@ -18,6 +18,9 @@ export async function POST(request: NextRequest) {
 
     const { name, phone } = await request.json();
 
+    // 전화번호에서 하이픈 제거 (DB에 하이픈 없이 저장된 경우 대비)
+    const cleanPhone = phone.replace(/-/g, "");
+
     // 노션 데이터베이스에서 이름과 전화번호로 검색
     const response = await (notion.databases as any).query({
       database_id: DATABASE_ID,
@@ -30,10 +33,20 @@ export async function POST(request: NextRequest) {
             },
           },
           {
-            property: "전화번호",
-            phone_number: {
-              equals: phone,
-            },
+            or: [
+              {
+                property: "전화번호",
+                phone_number: {
+                  equals: phone, // 입력된 그대로 검색 (하이픈 포함 가능)
+                },
+              },
+              {
+                property: "전화번호",
+                phone_number: {
+                  equals: cleanPhone, // 하이픈 제거하고 검색
+                },
+              },
+            ],
           },
         ],
       },
