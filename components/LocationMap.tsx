@@ -30,10 +30,8 @@ export default function LocationMap() {
   useEffect(() => {
     setIsClient(true);
     // 클라이언트 사이드에서만 Leaflet과 아이콘 로드
-    Promise.all([
-      import("leaflet"),
-      import("leaflet/dist/leaflet.css")
-    ]).then(([LModule]) => {
+    // CSS는 이미 app/globals.css에서 import되어 있음
+    import("leaflet").then((LModule) => {
       const L = LModule.default || LModule;
       const leafletIcon = L.icon({
         iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
