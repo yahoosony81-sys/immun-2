@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     const { name, phone } = await request.json();
 
     // 노션 데이터베이스에서 이름과 전화번호로 검색
-    const response = await notion.databases.query({
+    const response = await (notion.databases as any).query({
       database_id: DATABASE_ID,
       filter: {
         and: [
