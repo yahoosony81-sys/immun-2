@@ -119,7 +119,7 @@ export default function ModifyPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
                   placeholder="홍길동"
                 />
               </div>
@@ -134,7 +134,7 @@ export default function ModifyPage() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
                   placeholder="010-1234-5678"
                 />
               </div>
@@ -183,7 +183,7 @@ export default function ModifyPage() {
                       onChange={(date) => setNewDate(date)}
                       minDate={new Date()}
                       dateFormat="yyyy-MM-dd"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
                       onFocus={(e) => e.target.blur()}
                       onInputClick={() => {}}
                     />
@@ -197,7 +197,7 @@ export default function ModifyPage() {
                       id="newTime"
                       value={newTime}
                       onChange={(e) => setNewTime(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="">시간을 선택하세요</option>
                       {timeSlots.map((time) => (

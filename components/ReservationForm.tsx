@@ -85,7 +85,7 @@ export default function ReservationForm({ onSubmit }: ReservationFormProps) {
           id="name"
           type="text"
           {...register("name")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-3 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
           placeholder="홍길동"
         />
         {errors.name && (
@@ -102,7 +102,7 @@ export default function ReservationForm({ onSubmit }: ReservationFormProps) {
           id="email"
           type="email"
           {...register("email")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-3 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
           placeholder="example@email.com"
         />
         {errors.email && (
@@ -119,7 +119,7 @@ export default function ReservationForm({ onSubmit }: ReservationFormProps) {
           id="phone"
           type="tel"
           {...register("phone")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-3 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
           placeholder="010-1234-5678"
         />
         {errors.phone && (
@@ -137,7 +137,7 @@ export default function ReservationForm({ onSubmit }: ReservationFormProps) {
           onChange={handleDateChange}
           minDate={new Date()}
           dateFormat="yyyy-MM-dd"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-3 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
           placeholderText="날짜를 선택하세요"
           onFocus={(e) => e.target.blur()}
           onInputClick={() => {}}
@@ -155,7 +155,7 @@ export default function ReservationForm({ onSubmit }: ReservationFormProps) {
         <select
           id="preferredTime"
           {...register("preferredTime")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-3 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
           <option value="">시간을 선택하세요</option>
           {timeSlots.map((time) => (
