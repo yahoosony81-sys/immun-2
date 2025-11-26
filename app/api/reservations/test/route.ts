@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
     // 2단계: 노션 API 연결 테스트 (간단한 API 호출)
     try {
       // 사용자 정보 조회로 API 연결 테스트
-      const user = await notion.users.me();
+      const user = await notion.users.me({});
       checkResults.step2_apiConnection = {
         success: true,
         userId: user.id,
