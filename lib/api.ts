@@ -1,47 +1,84 @@
 import { ReservationFormData } from "@/types/reservation";
 
-// 간단한 로컬 스토리지 기반 저장 (실제로는 서버 API나 Supabase 등을 사용해야 함)
+// 노션 API를 통한 예약 저장
 export async function saveReservation(data: ReservationFormData): Promise<string> {
-  // 로컬 스토리지에 저장 (실제 프로덕션에서는 서버 API 호출)
-  const reservations = JSON.parse(localStorage.getItem("reservations") || "[]");
-  const newReservation = {
-    ...data,
-    id: Date.now().toString(),
-    createdAt: new Date().toISOString(),
-    status: "pending",
-  };
-  reservations.push(newReservation);
-  localStorage.setItem("reservations", JSON.stringify(reservations));
-  
-  // 실제로는 서버에 POST 요청을 보내야 함
-  // 예: await fetch('/api/reservations', { method: 'POST', body: JSON.stringify(data) })
-  
-  return newReservation.id;
+  try {
+    console.log("📤 예약 데이터 전송 시작:", data);
+    const jsonBody = JSON.stringify(data);
+    console.log("📤 전송할 JSON:", jsonBody);
+    
+    const response = await fetch("/api/reservations", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: jsonBody,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error("❌ API 응답 오류:", error);
+      throw new Error(error.error || error.details || "예약 저장에 실패했습니다.");
+    }
+
+    const result = await response.json();
+    console.log("✅ API 응답 성공:", result);
+    return result.id;
+  } catch (error) {
+    console.error("예약 저장 오류:", error);
+    // 오류 발생 시 사용자에게 알림
+    throw error;
+  }
 }
 
+// 노션 API를 통한 예약 조회
 export async function findReservationByNameAndPhone(
   name: string,
   phone: string
 ): Promise<any | null> {
-  // 로컬 스토리지에서 조회 (실제 프로덕션에서는 서버 API 호출)
-  const reservations = JSON.parse(localStorage.getItem("reservations") || "[]");
-  const reservation = reservations.find(
-    (r: any) => r.name === name && r.phone === phone
-  );
-  
-  return reservation || null;
+  try {
+    const response = await fetch("/api/reservations/search", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, phone }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "예약 조회에 실패했습니다.");
+    }
+
+    const result = await response.json();
+    return result.reservation;
+  } catch (error) {
+    console.error("예약 조회 오류:", error);
+    return null;
+  }
 }
 
+// 노션 API를 통한 예약 업데이트
 export async function updateReservation(
   id: string,
-  updates: Partial<ReservationFormData>
+  updates: Partial<ReservationFormData> & { status?: string }
 ): Promise<void> {
-  // 로컬 스토리지에서 업데이트 (실제 프로덕션에서는 서버 API 호출)
-  const reservations = JSON.parse(localStorage.getItem("reservations") || "[]");
-  const index = reservations.findIndex((r: any) => r.id === id);
-  if (index !== -1) {
-    reservations[index] = { ...reservations[index], ...updates };
-    localStorage.setItem("reservations", JSON.stringify(reservations));
+  try {
+    const response = await fetch("/api/reservations/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, updates }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "예약 업데이트에 실패했습니다.");
+    }
+  } catch (error) {
+    console.error("예약 업데이트 오류:", error);
+    throw error;
   }
 }
 

@@ -88,7 +88,7 @@ export default function ModifyPage() {
 
     try {
       await updateReservation(reservation.id, {
-        status: "cancelled",
+        status: "취소",
       } as any);
       alert("예약 취소 요청이 접수되었습니다.");
       router.push("/");

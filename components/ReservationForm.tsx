@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
@@ -30,16 +30,16 @@ interface ReservationFormProps {
 }
 
 export default function ReservationForm({ onSubmit }: ReservationFormProps) {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
     handleSubmit,
-    setValue,
+    control,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(reservationSchema),
+    mode: "onChange", // 실시간 validation
   });
 
   const timeSlots = [
@@ -54,13 +54,6 @@ export default function ReservationForm({ onSubmit }: ReservationFormProps) {
     "17:00",
     "18:00",
   ];
-
-  const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
-    if (date) {
-      setValue("preferredDate", date.toISOString().split("T")[0]);
-    }
-  };
 
   const onSubmitForm = async (data: FormData) => {
     setIsSubmitting(true);
@@ -132,15 +125,32 @@ export default function ReservationForm({ onSubmit }: ReservationFormProps) {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           희망 날짜 *
         </label>
-        <DatePicker
-          selected={selectedDate}
-          onChange={handleDateChange}
-          minDate={new Date()}
-          dateFormat="yyyy-MM-dd"
-          className="w-full px-4 py-3 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
-          placeholderText="날짜를 선택하세요"
-          onFocus={(e) => e.target.blur()}
-          onInputClick={() => {}}
+        <Controller
+          name="preferredDate"
+          control={control}
+          rules={{ required: "희망 날짜를 선택해주세요" }}
+          render={({ field }) => {
+            const selectedDate = field.value ? new Date(field.value) : null;
+            return (
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date: Date | null) => {
+                  if (date) {
+                    field.onChange(date.toISOString().split("T")[0]);
+                  } else {
+                    field.onChange("");
+                  }
+                }}
+                onBlur={field.onBlur}
+                minDate={new Date()}
+                dateFormat="yyyy-MM-dd"
+                className="w-full px-4 py-3 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
+                placeholderText="날짜를 선택하세요"
+                onFocus={(e) => e.target.blur()}
+                onInputClick={() => {}}
+              />
+            );
+          }}
         />
         {errors.preferredDate && (
           <p className="mt-1 text-sm text-red-600">{errors.preferredDate.message}</p>
